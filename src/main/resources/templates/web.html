@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+    Employee Name:
+    <input type="text" id="Empname" name="Employee"><br><br>
+    Employee ID:
+    <input type="number" id="Empid" name="empid"><br><br>
+    Salary:
+    <input type="number" id="Salary" name="salary"><br><br>
+
+
+    Pincode:<br><br>
+    <input type="number" id="pincode" name="Pincode" onchange="myFunction()"><br>
+    <br>
+
+    <input type="button" onclick="myNewFunction()">Click me</input>
+<div id="resultDiv">
+
+
+</div><br><br>
+    <div id="desig"></div><br><br>
+
+
+    <script type="text/javascript">
+        function myFunction() {
+         console.log("Working");
+        var pin=$('#pincode').val();
+        var result=$('#resultDiv');
+
+        console.log(pin);
+        $.ajax({
+        url: "http://localhost:8087/tools/codes?pincode="+pin,
+        type: 'GET',
+        dataType: 'json', // added data type
+        contentType: "application/json",
+        headers:{
+        'x-quikr-client':'Desktop'
+        },
+
+        success: function(data)
+        {
+        console.log("success");
+        result.html('City : '+data.City);
+
+
+        },
+        error: function(data){
+        alert("Error occurred due to:"+data.responseText);
+        }
+
+    });
+
+    }
+
+       function myNewFunction() {
+        var name=$('#Empname').val();
+        var desig=$('#desig');
+        var id=$('#Empid').val();
+        var s=$('#Salary').val();
+         console.log("Working");
+         var body={
+        'name': name,
+        'empid': id ,
+        'salary': s
+         };
+
+
+
+console.log(body);
+
+        $.ajax({
+        url: "http://localhost:8087/tools/details",
+        type: 'POST',
+        data: JSON.stringify(body),
+        dataType: 'json', // added data type
+        contentType: "application/json",
+
+
+        success: function(res)
+        {
+        console.log("success");
+        desig.html('Designation : '+res.Designation);
+
+
+        },
+        error: function(data){
+        alert("Error occurred due to:"+data.responseText);
+        }
+
+    });
+
+    }
+
+    </script>
+
+
+</body>
+</html>
